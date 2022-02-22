@@ -1,12 +1,8 @@
 package testgroup.DAO;
 
 import testgroup.Model.User;
-import org.hibernate.Session;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceContext;
 import java.util.List;
 
@@ -32,17 +28,11 @@ public class UserDaoImpl implements UserDao {
 
     //удаляем пользователя по ключю из из бд
     @Override
-    public User delete(int id) {
+    public void delete(int id) {
         User user = readById(id);
-//        if (null == user) {
-//            throw new NullPointerException("User not found");
-//        }
         em.remove(user);
         em.flush();
-
-        return user;
     }
-    //
 
     //обновим данные о пользователе, добавив по его старому ключу новую инфу
     @Override

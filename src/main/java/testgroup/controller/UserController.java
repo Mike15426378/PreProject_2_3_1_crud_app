@@ -1,7 +1,6 @@
 package testgroup.controller;
 
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import testgroup.Model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,6 +25,7 @@ public class UserController {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("users");                       //имя файла .jsp
         modelAndView.addObject("usersList", users);  //-> данный атрибут передаем в файл users.jsp
+
         return modelAndView;
     }
 
@@ -36,6 +36,7 @@ public class UserController {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("editPage");                   //имя файла .jsp
         modelAndView.addObject("user", user);       //передаем атрибут в файл .jsp и в след метод ->
+
         return modelAndView;
     }
 
@@ -45,6 +46,7 @@ public class UserController {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("redirect:/");                  //переход: на стартовую страницу
         userService.edit(user);                                  //добавили пользователя в бд*
+
         return modelAndView;
     }
 
@@ -54,6 +56,7 @@ public class UserController {
     public ModelAndView addPage() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("editPage");
+
         return modelAndView;
     }
 
@@ -62,19 +65,12 @@ public class UserController {
     public ModelAndView addUser(@ModelAttribute("user") User user) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("redirect:/");
-        userService.add(user);                                     //добавили в бд пользователя
+        userService.add(user);              //добавили в бд пользователя
+
         return modelAndView;
     }
 
     //удаление пользователя
-//    @RequestMapping(value="/delete/{id}", method = RequestMethod.GET)
-//    public ModelAndView deleteUser(@PathVariable("id") int id) {
-//        ModelAndView modelAndView = new ModelAndView();
-//        modelAndView.setViewName("redirect:/");
-//        User user = userService.readById(id);
-//        userService.delete(user);
-//        return modelAndView;
-//    }
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
     public ModelAndView deleteUser(@PathVariable("id") int id) {
         ModelAndView modelAndView = new ModelAndView();
