@@ -16,11 +16,6 @@ public class UserDaoImpl implements UserDao {
     @PersistenceContext
     private EntityManager em;
 
-//    @Autowired
-//    public void setEntityManager(EntityManagerFactory emf) {
-//        this.em = em;
-//    }
-
     @Override
     @SuppressWarnings("unchecked")
     public List<User> allUsers() {
@@ -37,10 +32,17 @@ public class UserDaoImpl implements UserDao {
 
     //удаляем пользователя по ключю из из бд
     @Override
-    public void delete(User user) {
+    public User delete(int id) {
+        User user = readById(id);
+//        if (null == user) {
+//            throw new NullPointerException("User not found");
+//        }
         em.remove(user);
         em.flush();
+
+        return user;
     }
+    //
 
     //обновим данные о пользователе, добавив по его старому ключу новую инфу
     @Override
