@@ -2,55 +2,56 @@ package testgroup.DAO;
 
 import testgroup.Model.User;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceContext;
 import java.util.List;
 
 @Repository
 public class UserDaoImpl implements UserDao {
 
-    private SessionFactory sessionFactory;
+    @PersistenceContext
+    private EntityManager em;
 
-    @Autowired
-    public void setSessionFactory(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
-    }
+//    @Autowired
+//    public void setEntityManager(EntityManagerFactory emf) {
+//        this.em = em;
+//    }
 
     @Override
     @SuppressWarnings("unchecked")
     public List<User> allUsers() {
-        Session session = sessionFactory.getCurrentSession();
-        return session.createQuery("from User").list();
+        return em.createQuery("from User", User.class).getResultList();
 
     }
 
     //добавим пользователя в хранилище
     @Override
     public void add(User user) {
-        Session session = sessionFactory.getCurrentSession();
-        session.persist(user);
+        em.persist(user);
+        em.flush();
     }
 
     //удаляем пользователя по ключю из из бд
     @Override
     public void delete(User user) {
-        Session session = sessionFactory.getCurrentSession();
-        session.delete(user);
+        em.remove(user);
+        em.flush();
     }
 
     //обновим данные о пользователе, добавив по его старому ключу новую инфу
     @Override
     public void edit(User user) {
-        Session session = sessionFactory.getCurrentSession();
-        session.update(user);
+        em.merge(user);
+        em.flush();
     }
 
     //достанем пользователя по id из хранилища
     @Override
     public User readById(int id) {
-        Session session = sessionFactory.getCurrentSession();
-        return session.get(User.class, id);
+        return em.find(User.class, id);
     }
 }

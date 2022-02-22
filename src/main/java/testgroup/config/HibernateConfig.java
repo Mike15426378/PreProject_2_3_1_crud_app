@@ -1,5 +1,10 @@
 package testgroup.config;
 
+import org.springframework.orm.jpa.JpaTransactionManager;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.jta.JtaTransactionManager;
 import testgroup.Model.User;
 import org.apache.tomcat.dbcp.dbcp2.BasicDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,49 +26,79 @@ import java.util.Properties;
 @PropertySource(value = "classpath:db.properties")
 public class HibernateConfig {
 
-    private Environment environment;
+    private Environment env;
 
     @Autowired
-    public void setEnvironment(Environment environment) {
-        this.environment = environment;
+    public void setEnv(Environment env) {
+        this.env = env;
     }
 
     private Properties hibernateProperties() {
-        Properties properties = new Properties();
-        properties.setProperty("hibernate.dialect", environment.getRequiredProperty("hibernate.dialect"));
-        properties.setProperty("hibernate.show_sql", environment.getRequiredProperty("hibernate.show_sql"));
+        Properties props = new Properties();
+        props.setProperty("hibernate.dialect", env.getRequiredProperty("hibernate.dialect"));
+        props.setProperty("hibernate.show_sql", env.getRequiredProperty("hibernate.show_sql"));
+        props.setProperty("hibernate.hbm2ddl.auto", env.getRequiredProperty("hibernate.hbm2ddl.auto"));
 
-        return properties;
+        return props;
     }
 
     @Bean
     public DataSource dataSource() {
-        BasicDataSource dataSource = new BasicDataSource();
-        dataSource.setDriverClassName(environment.getRequiredProperty("jdbc.driverClassName"));
-        dataSource.setUrl(environment.getRequiredProperty("jdbc.url"));
-        dataSource.setUsername(environment.getRequiredProperty("jdbc.username"));
-        dataSource.setPassword(environment.getRequiredProperty("jdbc.password"));
+        BasicDataSource ds = new BasicDataSource();
+        ds.setDriverClassName(env.getRequiredProperty("jdbc.driverClassName"));
+        ds.setUrl(env.getRequiredProperty("jdbc.url"));
+        ds.setUsername(env.getRequiredProperty("jdbc.username"));
+        ds.setPassword(env.getRequiredProperty("jdbc.password"));
 
-        return dataSource;
+        ds.setInitialSize(Integer.valueOf(env.getRequiredProperty("db.initialSize")));
+        ds.setMinIdle(Integer.valueOf(env.getRequiredProperty("db.minIdle")));
+        ds.setMaxIdle(Integer.valueOf(env.getRequiredProperty("db.maxIdle")));
+        ds.setTimeBetweenEvictionRunsMillis(Long.valueOf(env.getRequiredProperty("db.timeBetweenEvictionRunsMillis")));
+        ds.setMinEvictableIdleTimeMillis(Long.valueOf(env.getRequiredProperty("db.minEvictableIdleTimeMillis")));
+        ds.setTestOnBorrow(Boolean.valueOf(env.getRequiredProperty("db.testOnBorrow")));
+        ds.setValidationQuery(env.getRequiredProperty("db.validationQuery"));
+
+        return ds;
     }
 
     @Bean
-    public LocalSessionFactoryBean sessionFactory() {
-        LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
-        sessionFactory.setDataSource(dataSource());
-        sessionFactory.setPackagesToScan("testgroup.Model");
-        sessionFactory.setHibernateProperties(hibernateProperties());
-        sessionFactory.setAnnotatedClasses(User.class);
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
+        LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
+        em.setDataSource(dataSource());
+        em.setPackagesToScan(env.getRequiredProperty("jdbc.entity.package"));
+        em.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
+        //em.setPackagesToScan("testgroup.Model");
+        em.setJpaProperties(hibernateProperties());
 
-        return sessionFactory;
+        return em ;
     }
 
     @Bean
-    public HibernateTransactionManager transactionManager() {
-        HibernateTransactionManager transactionManager = new HibernateTransactionManager();
-        transactionManager.setSessionFactory(sessionFactory().getObject());
+    public PlatformTransactionManager platformTransactionManager() {
+        JpaTransactionManager manager = new JpaTransactionManager();
+        manager.setEntityManagerFactory(entityManagerFactory().getObject());
 
-        return transactionManager;
+        return manager;
     }
+
+
+//    @Bean
+//    public LocalSessionFactoryBean sessionFactory() {
+//        LocalSessionFactoryBean sf = new LocalSessionFactoryBean();
+//        sf.setDataSource(dataSource());
+//        sf.setPackagesToScan("testgroup.Model");
+//        sf.setHibernateProperties(hibernateProperties());
+//        sf.setAnnotatedClasses(User.class);
+//
+//        return sf;
+//    }
+//
+//    @Bean
+//    public HibernateTransactionManager transactionManager() {
+//        HibernateTransactionManager tm  = new HibernateTransactionManager();
+//        tm.setSessionFactory(sessionFactory().getObject());
+//
+//        return tm;
+//    }
 
 }
