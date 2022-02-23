@@ -35,8 +35,13 @@ public class UserDaoImpl implements UserDao {
 
     //обновим данные о пользователе, добавив по его старому ключу новую инфу
     @Override
-    public void edit(User user) {
-        em.merge(user);
+    public void edit(int id, User updatedUser) {
+        User userToBeUpdated = readById(id);
+        userToBeUpdated.setName(updatedUser.getName());
+        userToBeUpdated.setSurname(updatedUser.getSurname());
+        userToBeUpdated.setAge(updatedUser.getAge());
+        userToBeUpdated.setEmail(updatedUser.getEmail());
+        em.merge(userToBeUpdated);
         em.flush();
     }
 

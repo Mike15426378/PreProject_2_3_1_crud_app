@@ -5,7 +5,7 @@
     <title>Edit</title>
 </head>
 <body>
-    <form th:method="PATCH" th:action="@{/edit}" th:object="${user}">
+    <form th:method="PATCH" th:action="@{/{id}(id=${user.getId()})}" th:object="${user}">
         <label for="name">Enter name: </label>
         <input type="text" th:field="*{name}" id="name"/>
 
@@ -18,7 +18,7 @@
         <label for="email">Enter email:</label>
         <input type="text" th:field="*{email}" id="email">
         <br/>
-        <input type="submit" value="UPDATE"/>
+        <input type="submit" value="Update"/>
     </form>
     <br/>
     <b/>

@@ -55,14 +55,4 @@ public class WebConfig implements WebMvcConfigurer {
         resolver.setCharacterEncoding("UTF-8");
         registry.viewResolver(resolver);
     }
-
-
-//    @Bean
-//    ViewResolver viewResolver() {
-//        InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
-//        viewResolver.setPrefix("/WEB-INF/Users/");
-//        viewResolver.setSuffix(".html");
-//        return viewResolver;
-//    }
-
 }

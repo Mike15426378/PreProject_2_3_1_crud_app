@@ -24,7 +24,7 @@
                     <td th:text="${user.getAge()}"/>
                     <td th:text="${user.getEmail()}"/>
                     <td>
-                        <a th:href="@{/edit/{id}(id=${user.getId()})}">Edit</a>
+                        <a th:href="@{/{id}/edit(id=${user.getId()})}">Edit</a>
                         <a th:href="@{/delete/{id}(id=${user.getId()})}">Delete</a>
                     </td>
                 </tr>

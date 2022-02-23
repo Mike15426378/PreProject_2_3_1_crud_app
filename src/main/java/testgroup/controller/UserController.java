@@ -24,15 +24,15 @@ public class UserController {
     }
 
     //страница для редактирования
-    @GetMapping("/edit/{id}")
-    public String editPage(@PathVariable(value = "id", required = true) int id, Model model) {
+    @GetMapping("/{id}/edit")
+    public String editPage(Model model, @PathVariable(value = "id") int id) {
         model.addAttribute("user", userService.readById(id));
         return "edit";
     }
     //метод редактирования пользователя
-    @PatchMapping("/edit")
-    public String editUser(@ModelAttribute("user") User user) {
-        userService.edit(user);
+    @PatchMapping("/{id}")
+    public String update(@ModelAttribute("user") User user, @PathVariable("id") int id) {
+        userService.edit(id, user);
         return "redirect:/";
     }
 
