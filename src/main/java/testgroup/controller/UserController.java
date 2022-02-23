@@ -30,7 +30,7 @@ public class UserController {
         return "edit";
     }
     //метод редактирования пользователя
-    @GetMapping("/edit")
+    @PatchMapping("/edit")
     public String editUser(@ModelAttribute("user") User user) {
         userService.edit(user);
         return "redirect:/";

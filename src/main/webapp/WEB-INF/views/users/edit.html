@@ -5,18 +5,18 @@
     <title>Edit</title>
 </head>
 <body>
-    <form th:method="GET" th:action="@{/edit}" th:object="${user}">
+    <form th:method="PATCH" th:action="@{/edit}" th:object="${user}">
         <label for="name">Enter name: </label>
-        <input type="text" name="name" id="name"/>
+        <input type="text" th:field="*{name}" id="name"/>
 
         <label for="surname">Enter surname:</label>
-        <input type="text" name="surname" id="surname">
+        <input type="text" th:field="*{surname}" id="surname">
 
         <label for="age">Enter age:</label>
-        <input type="text" name="age" id="age">
+        <input type="text" th:field="*{age}" id="age">
 
         <label for="email">Enter email:</label>
-        <input type="text" name="email" id="email">
+        <input type="text" th:field="*{email}" id="email">
         <br/>
         <input type="submit" value="UPDATE"/>
     </form>
