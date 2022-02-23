@@ -16,7 +16,6 @@ public class UserDaoImpl implements UserDao {
     @SuppressWarnings("unchecked")
     public List<User> allUsers() {
         return em.createQuery("from User", User.class).getResultList();
-
     }
 
     //добавим пользователя в хранилище
