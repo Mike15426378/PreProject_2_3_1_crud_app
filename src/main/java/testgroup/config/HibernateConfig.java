@@ -34,7 +34,6 @@ public class HibernateConfig {
         props.setProperty("hibernate.dialect", env.getRequiredProperty("hibernate.dialect"));
         props.setProperty("hibernate.show_sql", env.getRequiredProperty("hibernate.show_sql"));
         props.setProperty("hibernate.hbm2ddl.auto", env.getRequiredProperty("hibernate.hbm2ddl.auto"));
-
         return props;
     }
 
@@ -53,7 +52,6 @@ public class HibernateConfig {
         ds.setMinEvictableIdleTimeMillis(Long.valueOf(env.getRequiredProperty("db.minEvictableIdleTimeMillis")));
         ds.setTestOnBorrow(Boolean.valueOf(env.getRequiredProperty("db.testOnBorrow")));
         ds.setValidationQuery(env.getRequiredProperty("db.validationQuery"));
-
         return ds;
     }
 
@@ -64,7 +62,6 @@ public class HibernateConfig {
         em.setPackagesToScan(env.getRequiredProperty("jdbc.entity.package"));
         em.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
         em.setJpaProperties(hibernateProperties());
-
         return em ;
     }
 
@@ -72,7 +69,6 @@ public class HibernateConfig {
     public PlatformTransactionManager platformTransactionManager() {
         JpaTransactionManager manager = new JpaTransactionManager();
         manager.setEntityManagerFactory(entityManagerFactory().getObject());
-
         return manager;
     }
 }
