@@ -2,10 +2,10 @@ package testgroup.controller;
 
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import testgroup.Model.User;
+import testgroup.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import testgroup.SERVICE.UserService;
+import testgroup.service.UserService;
 
 @Controller
 public class UserController {
