@@ -30,8 +30,8 @@ public class UserController {
     }
 
     @PatchMapping("/{id}")
-    public String update(@ModelAttribute("user") User user, @PathVariable("id") int id) {
-        userService.edit(id, user);
+    public String update(@ModelAttribute("user") User user) {
+        userService.edit(user);
         return "redirect:/";
     }
 
